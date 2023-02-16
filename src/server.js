@@ -1,38 +1,44 @@
 'use strict';
 
 const express = require ('express');
-const app = express ();
-const port = process.env.PORT || 3001;
+
+const PORT = process.env.PORT || 3001;
 const errorHandler = require ('./error-handlers/500.js');
 const logger = require ('./middleware/logger.js');
 const notFound = require ('./error-handlers/404.js');
 const peopleRouter = require ('./routes/people.js');
+const validator = require('./middleware/validator');
 
-//if you dont use express.json() you will get undefined
-app.use (express.json ());
+// creates an express singleton
+const app = express();
+
+app.use(express.json());
 app.use(peopleRouter);
+app.use(logger);
 
-function start () {
-  app.listen (port, () => {
-    console.log (`Server listening on port ${port}`);
-  });
-}
+app.get('/', (req, res, next) => {
 
-app.get ('/', logger, (req, res, next) => {
-  res.status (200).send ('Hello there ');
+  res.status(200).send('Hello World!');
 });
 
-/*
-app.get ('/people', (req, res, next) => {
-  if (!req.query.name) {
-    next ('No name provided');
-  }
-  res.status (200).send (`Hello there : ${req.query.name}`);
+app.get('/bad', (req, res, next) => {
+  next('we have an error');
 });
-*/
 
-app.use ('*', notFound);
-app.use (errorHandler);
-app.use (logger);
+app.get('/person', validator, (req, res, next) => {
+  console.log('this is the query from server.js', req.query);
+  res.status(200).json(req.query);
+});
 
-module.exports = {start, app};
+app.use('*', notFound);
+app.use(errorHandler);
+
+const start = () => {
+  app.listen(PORT, () => console.log('server running on port', PORT));
+};
+
+module.exports = { start, app };
+
+
+
+

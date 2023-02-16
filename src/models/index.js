@@ -6,7 +6,7 @@ const {Sequelize, DataTypes} = require ('sequelize');
 const people = require ('./people.js');
 
 const DATABASE_URL = process.env.NODE_ENV === 'test'
-  ? 'sqlite:memory'
+  ? 'sqlite::memory'
   : process.env.DATABASE_URL;
 
 const sequelizeDatabase = new Sequelize (DATABASE_URL);

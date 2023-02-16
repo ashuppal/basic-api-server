@@ -2,10 +2,9 @@
 
 module.exports = (req, res, next) => {
   res.status(404).send({
-    error: '404 Not Found',
+    error: 404,
     route: req.baseUrl,
-    message: 'The route you are looking for does not exist',
+    message: 'Not Found',
   });
 };
-
 
