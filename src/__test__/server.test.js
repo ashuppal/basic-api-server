@@ -1,35 +1,46 @@
-'use strict';
+const { app } = require('../server');
+const supertest = require('supertest');
+const mockRequest = supertest(app);
 
-const supertest = require ('supertest');
-const {app} = require ('../server');
-const mockRequest = supertest (app);
+describe('API Server', () => {
+  test('handles the root path', async () => {
+    const response = await mockRequest.get('/');
 
-describe ('handles 404 path', () => {
-
-  it ('invalid route', async () => {
-    const response = await mockRequest.get ('/path-not-found');
-    expect (response.status).toBe (404);
+    expect(response.status).toBe(200);
+    expect(response.text).toBeTruthy();
+    expect(response.text).toEqual('Hello World!');
   });
 
-  it ('invalid path', async () => {
-    const response = await mockRequest.post ('/path-not-found');
-    expect (response.status).toBe (404);
+  test('handles invalid request route', async () => {
+    const response = await mockRequest.get('/foo');
+
+    expect(response.status).toEqual(404);
   });
 
-  it ('handles the root path', async () => {
-    const response = await mockRequest.get ('/');
-    expect (response.status).toBe (200);
+  test('handles invalid request method', async () => {
+    const response = await mockRequest.post('/person');
+
+    expect(response.status).toEqual(404);
   });
 
-  it ('handles the person path with a name', async () => {
-    const response = await mockRequest.get ('/people?name=ash');
-    let nameJSON = JSON.stringify({name: 'ash'});
-    expect (response.text).toEqual (nameJSON);
-    expect (response.status).toBe (200);
+  test('handles error', async () => {
+    const response = await mockRequest.get('/bad');
+    // console.log(response);
+    expect(response.status).toEqual(500);
+    expect(response.body.route).toEqual('/bad');
   });
 
-  it ('handles the person path with no name', async () => {
-    const response = await mockRequest.get ('/people');
-    expect (response.status).toBe (500);
+  test('handles the person post route', async () => {
+    const response = await mockRequest.get(`/person?name=Fred`);
+    // console.log('this is the supertest response', response);
+    let nameJson = JSON.stringify({name: 'Fred'});
+    expect(response.text).toEqual(nameJson);
+    expect(response.status).toEqual(200);
+  });
+
+  test('fails the person post route with no query name', async () => {
+    const response = await mockRequest.get(`/person`);
+    console.log('this is response.text', response.text);
+    expect(response.status).toEqual(404);
   });
 });

@@ -24,7 +24,7 @@ describe('REST API', () => {
     });
 
     expect(response.status).toBe(200);
-    expect(response.body.name).toEqaul('Tester');
+    expect(response.body.name).toEqual('Tester');
     expect(response.body.age).toEqual(25);
     expect(response.body.pronouns).toEqual('she/her');
     expect(response.body.id).toBeTruthy();

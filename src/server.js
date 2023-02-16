@@ -22,12 +22,14 @@ app.get ('/', logger, (req, res, next) => {
   res.status (200).send ('Hello there ');
 });
 
+/*
 app.get ('/people', (req, res, next) => {
   if (!req.query.name) {
     next ('No name provided');
   }
   res.status (200).send (`Hello there : ${req.query.name}`);
 });
+*/
 
 app.use ('*', notFound);
 app.use (errorHandler);
