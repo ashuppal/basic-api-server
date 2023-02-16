@@ -7,8 +7,6 @@ describe ('validator middleware', () => {
   let res = {};
   let next = jest.fn ();
 
-
-
   it ('should call next() if name is in the query string', () => {
     req.query = {name: 'ash'};
     validator (req, res, next);

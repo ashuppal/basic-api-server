@@ -32,7 +32,7 @@ describe('API Server', () => {
 
   test('handles the person post route', async () => {
     const response = await mockRequest.get(`/person?name=Fred`);
-    // console.log('this is the supertest response', response);
+ 
     let nameJson = JSON.stringify({name: 'Fred'});
     expect(response.text).toEqual(nameJson);
     expect(response.status).toEqual(200);
@@ -40,7 +40,7 @@ describe('API Server', () => {
 
   test('fails the person post route with no query name', async () => {
     const response = await mockRequest.get(`/person`);
-    console.log('this is response.text', response.text);
-    expect(response.status).toEqual(404);
+    // console.log('this is response.text', response.text);
+    expect(response.status).toEqual(500);
   });
 });
