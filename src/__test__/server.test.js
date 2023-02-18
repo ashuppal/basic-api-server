@@ -1,6 +1,7 @@
 const { app } = require('../server');
 const supertest = require('supertest');
 const mockRequest = supertest(app);
+// const { sequelizeDatabase } = require('../models');
 
 describe('API Server', () => {
   test('handles the root path', async () => {
@@ -43,4 +44,6 @@ describe('API Server', () => {
     // console.log('this is response.text', response.text);
     expect(response.status).toEqual(500);
   });
+
+  
 });
